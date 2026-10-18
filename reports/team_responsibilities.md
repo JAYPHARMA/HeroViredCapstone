@@ -1,14 +1,12 @@
-# Presentation and responsibility map
+# Project workstreams
 
-Presenter: **Sanket Toche**.
+Presenter: **Sanket Toche**
 
-The brief recommends five learners. No additional team-member names or individual contribution claims have been supplied. Add verified contributors here if this is a group submission.
-
-| Responsibility | Evidence to explain during assessment |
+| Workstream | Main files |
 |---|---|
-| Problem framing and business context | problem_scope.md and presentation slides 1–2 |
-| Data access and preprocessing | notebook 01, data_quality.md, data_audit.json |
-| EDA and data quality | notebook 02 and reports/figures |
-| Baseline and advanced modeling | notebooks 03–04, run_capstone.py, experiment records |
-| Evaluation and responsible use | model_evaluation.md, metrics.json, checks and regression tests |
-| Deployment and final narrative | Streamlit, FastAPI, launchers, deck and presenter guide |
+| Problem definition and business context | `problem_scope.md`, slides 1–2 |
+| Data access and preprocessing | Notebook 01, `data_quality.md`, `data_audit.json` |
+| Exploratory analysis | Notebook 02, `reports/figures/` |
+| Modeling and experiments | Notebooks 03–04, `run_capstone.py`, experiment records |
+| Evaluation and responsible use | `model_evaluation.md`, `metrics.json`, controlled checks and tests |
+| Deployment and presentation | Streamlit, FastAPI, launch scripts, PowerPoint and presenter notes |

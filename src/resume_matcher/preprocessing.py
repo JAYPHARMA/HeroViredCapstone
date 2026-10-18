@@ -12,7 +12,8 @@ _NON_TEXT_RE = re.compile(r"[^a-zA-Z0-9+#./\s-]")
 
 _PERSONAL_LINE_RE = re.compile(
     r"^\s*(?:candidate name|full name|name|gender|sex|age|date of birth|dob|religion|caste|"
-    r"marital status|nationality|home address|address)\s*[:=].*$", re.I | re.M
+    r"marital status|nationality|home address|address)\s*[:=].*$",
+    re.I | re.M,
 )
 
 
@@ -27,7 +28,12 @@ def redact_personal_details(text: object) -> str:
     value = re.sub(r"[\w.+-]+@[\w.-]+\.[a-zA-Z]{2,}", " ", value)
     value = re.sub(r"(?<!\w)(?:\+?\d[\d ()-]{8,}\d)(?!\w)", " ", value)
     # Remove the boilerplate clause, not the entire JD when text is one long line.
-    value = re.sub(r"\b(?:equal opportunity employer|all rights reserved|apply now|click here to apply)\b[^.!?\n]*(?:[.!?]|$)", " ", value, flags=re.I)
+    value = re.sub(
+        r"\b(?:equal opportunity employer|all rights reserved|apply now|click here to apply)\b[^.!?\n]*(?:[.!?]|$)",
+        " ",
+        value,
+        flags=re.I,
+    )
     return value
 
 

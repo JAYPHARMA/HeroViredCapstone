@@ -58,7 +58,7 @@ All source records currently have a generic job-title field, so reliable job-fam
 ## Learning curve and experiments
 ![Learning curve](figures/learning_curve.png)
 Full configurations, validation metrics and elapsed training time are in `experiments/experiments.json` and `.csv`.
-The curve varies classifier training-set size on one fixed JD-grouped validation split. Encoder weights stay frozen, so optimizer/learning-rate/epoch tuning of the transformer is not claimed.
+The curve varies classifier training-set size on one fixed JD-grouped validation split. Encoder weights stay frozen. Optimizer, learning-rate and epoch tuning therefore apply only to a future fine-tuning experiment.
 The full-size learning-curve point has training macro F1 0.9582 versus validation macro F1 0.4707. This large gap and the non-monotonic validation curve show overfitting/instability. More labeled data, stronger regularization and grouped cross-validation are future work, not completed claims.
 
 ## Latency

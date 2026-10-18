@@ -25,5 +25,5 @@
     "pytest": "8.3.5",
     "httpx": "0.28.1"
   },
-  "scope": "Measured direct dependency versions. No claim of a fully isolated or transitive hash-locked environment."
+  "scope": "Python and direct dependency versions used for evaluation; transitive dependency versions may vary."
 }

@@ -1,145 +1,104 @@
 # Resume Screening and Job Description Matching
 
-HeroVired AI/ML Specialisation Capstone, Project 5. Presenter: **Sanket Toche**.
+**Sanket Toche · HeroVired AI/ML Specialisation · Project 5**
 
-Ranks resumes against a JD, predicts low/potential/strong fit, and explains keyword gaps plus possible semantic paraphrases. Recruiters must verify experience and retain every hiring decision.
+This project compares resumes with a job description, ranks candidates and identifies skill gaps. It combines Sentence-BERT embeddings with a supervised fit classifier and a keyword-based explanation layer. A Streamlit dashboard and FastAPI endpoint provide two ways to use the saved model.
 
-## Clone from GitHub
+## Results
 
-Install Git LFS before cloning. The model weights, reproducibility CSVs and submission ZIP use LFS, so a source-only download may contain pointer files instead of those artifacts.
+Evaluation uses 1,759 held-out resume–JD pairs. Model selection uses a separate validation split grouped by job description.
+
+| Model | Accuracy | Macro F1 | NDCG@3 |
+|---|---:|---:|---:|
+| TF-IDF + Random Forest | 0.4673 | 0.3626 | 0.6150 |
+| Sentence-BERT + Logistic Regression | 0.4792 | 0.4489 | 0.6910 |
+
+The advanced model improves macro F1, although accuracy remains below the majority-class baseline (48.72%). See [the evaluation report](reports/model_evaluation.md) for class-level metrics, errors and ranking definitions.
+
+## Installation
+
+Requirements: Python 3.11, Git and Git LFS. Model weights, dataset CSVs and the submission ZIP use LFS.
 
 ```powershell
 git lfs install
 git clone https://github.com/JAYPHARMA/HeroViredCapstone.git
 cd HeroViredCapstone
 git lfs pull
+python -m venv .venv
+.\.venv\Scripts\python.exe -m pip install -r requirements-lock.txt
+.\.venv\Scripts\python.exe -m pip install --no-deps -e .
 ```
 
-Then follow **Set up on another computer** below. The eight-slide deck is in `presentation/output/`; the complete portable package is in `submission/`.
+The dependency file pins the direct package versions used for evaluation. The complete environment summary is in `reports/environment.json`.
 
-## Present the prepared project
-
-The trained classifier and local Sentence-BERT encoder are already included. No retraining or model download is needed for this machine's demo.
+## Dashboard
 
 ```powershell
-cd A:\HEROVIRED
 .\.venv\Scripts\python.exe -m streamlit run app_streamlit.py
 ```
 
-Or double-click **launch_dashboard.cmd**. Open http://localhost:8501. The default JD and three candidate examples are ready.
+Open http://localhost:8501. On Windows, `launch_dashboard.cmd` runs the same command.
 
-1. Show candidate rankings, keyword gaps and prediction details.
-2. Download the CSV.
-3. Open **Model evidence** for test metrics and plots.
-4. Open **Known failure case** and demonstrate why skill mentions do not establish proficiency.
+Paste one job description and separate resumes with `---` on a line by itself. The dashboard displays rankings, fit categories, matched/missing keywords and possible skill paraphrases. Results can be downloaded as CSV. The other tabs contain evaluation figures and a keyword-stuffing failure example.
 
-Presentation: `presentation/output/HeroVired_Capstone_Sanket_Toche.pptx`. Presenter script, demo checklist and viva questions: `presentation/presenter_guide.md`.
+The included model and local encoder support offline inference. Retraining is optional.
 
-## Run the API
+## API
 
 ```powershell
 .\.venv\Scripts\python.exe -m uvicorn api_fastapi:app --host 127.0.0.1 --port 8000
 ```
 
-Or double-click **launch_api.cmd**. Interactive documentation: http://127.0.0.1:8000/docs. Health: http://127.0.0.1:8000/health.
+Interactive API documentation: http://127.0.0.1:8000/docs. `GET /health` checks readiness. `POST /match` accepts `jd_text` and a `candidates` list containing `candidate_name` and `resume_text`. Each text must contain 20–50,000 characters; a request supports 1–50 candidates.
 
-```json
-{
-  "jd_text": "Python engineer with SQL and Docker experience required.",
-  "candidates": [
-    {"candidate_name": "Example A", "resume_text": "Python engineer building SQL services and Docker containers."},
-    {"candidate_name": "Example B", "resume_text": "Graphic designer specializing in print layouts and illustration."}
-  ]
-}
-```
+## Method
 
-POST this body to `/match`. Inputs must contain 20–50,000 characters each, with 1–50 candidates. Blank inputs are rejected. Paths resolve from the project directory, independent of the shell's current working directory.
+The baseline uses TF-IDF cosine similarity, skill/token overlap and relative text length with a 250-tree Random Forest.
 
-## Set up on another computer
+The advanced model uses the pretrained `all-MiniLM-L6-v2` encoder. Up to eight 150-word chunks represent each document as a pooled, normalized 384-dimensional vector. Resume and JD vectors, their absolute difference, element-wise product and overlap features form a 1,545-dimensional input to the classifier. The encoder stays frozen; the classifier learns the three fit labels.
 
-Use **Python 3.11**. Keep `models/encoder/` and `models/resume_matcher.joblib` with the project for offline inference.
+Configurations vary logistic regularization and tree-ensemble parameters. Validation macro F1 selects the final classifier, which is then refitted on 6,228 cleaned source-training pairs.
+
+Ranking combines 30% expected fit, 45% embedding cosine and 25% keyword overlap. The classifier category is a separate prediction and can disagree with rank. Neither output is a calibrated hiring probability.
+
+## Reproducing the experiments
 
 ```powershell
-python -m venv .venv
-.\.venv\Scripts\python.exe -m pip install -r requirements-lock.txt
-.\.venv\Scripts\python.exe -m pip install --no-deps -e .
-.\.venv\Scripts\python.exe -m streamlit run app_streamlit.py
-```
-
-The constraints pin measured direct dependency versions, including compatible Torch, Transformers and Sentence Transformers releases. They are not a complete transitive/hash lock. `reports/environment.json` records the run environment. Do not use an unrelated system Python to launch the advanced model.
-
-## Reproduce the research
-
-```powershell
-# Only needed if encoder weights are missing; downloads and records a revision.
-.\.venv\Scripts\python.exe scripts/prepare_encoder.py
-
-# Audits archived public data, creates grouped validation, runs configurations,
-# selects on validation macro F1, refits, evaluates, and records artifacts/hashes.
 .\.venv\Scripts\python.exe scripts/run_capstone.py
-
-# Recheck test metrics using the deployed score precision, with no fitting.
 .\.venv\Scripts\python.exe scripts/recheck_evaluation.py
-
-# Optional standalone latency measurement; run before rebuilding reports.
 .\.venv\Scripts\python.exe scripts/benchmark.py
-
-# Build measured reports, plots, example outputs and notebook sources.
 .\.venv\Scripts\python.exe scripts/build_submission.py
 .\.venv\Scripts\python.exe scripts/execute_notebooks.py
-
-# Regression checks for the model, data protocol and API.
-.\.venv\Scripts\python.exe -m pytest tests -q
+.\.venv\Scripts\python.exe -m pytest tests -q --junitxml=reports/test_results.xml
 ```
 
-Optional `run_capstone.py --download` reloads dataset revision `bfab7acecac062628b39e0dd0c59e72d675edc9c` from `facehuggerapoorv/resume-jd-match`. The brief's `resumejd-match` identifier differs from the accessible repository; the corrected identifier is intentional.
+`run_capstone.py` uses the archived public data. Add `--download` to reload its pinned Hugging Face revision. `prepare_encoder.py` downloads the encoder only if the local copy is missing. `train_model.py` is a separate 12-row sample exercise and writes `sample_baseline.joblib`.
 
-The full runner replaces the deployed capstone artifact. The older `scripts/train_model.py` command instead writes a separate **sample_baseline.joblib** and separate sample splits, so its 12-row demo dataset cannot accidentally replace the presentation model through the default command.
+## Project files
 
-## Method and evaluation
+| Folder | Contents |
+|---|---|
+| `src/resume_matcher/` | Preprocessing, skill extraction, models and evaluation utilities |
+| `scripts/` | Training, evaluation, benchmarking and packaging |
+| `notebooks/` | Four executed notebooks: data access, EDA, baseline and advanced model |
+| `reports/` | Metrics, experiment records, plots, error analysis and data audit |
+| `models/` | Saved classifiers, local encoder and research embedding cache |
+| `presentation/` | Eight-slide PowerPoint, speaker notes and presentation guide |
+| `submission/` | Portable project ZIP |
+| `tests/` | 15 regression checks covering preprocessing, inference, API and dashboard |
 
-- **Baseline:** TF-IDF cosine, skill/token overlap and lengths, then a 250-tree Random Forest.
-- **Semantic baseline:** frozen Sentence-BERT cosine with a logistic fit classifier, recorded in validation experiments.
-- **Advanced:** frozen `all-MiniLM-L6-v2`, up to eight 150-word chunks per document, pooled 384-D embeddings. Concatenate resume/JD embeddings, absolute difference, element-wise product, cosine and lexical features (1,545 dimensions), then train a supervised classifier.
-- **Selection:** compare logistic regularization and tree-ensemble settings on JD-grouped validation macro F1. Do not select configurations from test results. The encoder is not fine-tuned on capstone labels.
-- **Metrics:** accuracy, macro/weighted/class-wise F1, confusion matrices, JD-grouped NDCG@3, strong-fit Precision@3, sample errors and CPU latency. See `reports/model_evaluation.md` for measured values and definitions.
-- **Score:** a composite review priority: 30% expected fit, 45% embedding cosine and 25% keyword overlap. Classifier categories remain separate predictions and can disagree with rank; the UI explains both rather than relabeling candidates to match a score. It is not a calibrated hiring probability. Short inputs and category/similarity contradictions show warnings.
+## Limitations
 
-## Submission files
+- Test job descriptions are unseen, but most test resumes also occur in training. Performance on entirely new candidates needs a separate evaluation.
+- Source annotation quality and synthetic-data status are uncertain. Contradictory training pairs are quarantined.
+- Overfitting, short inputs, negation and unsupported skill lists can produce incorrect or overconfident categories.
+- Explicit demographic/contact-field redaction passes controlled checks. Free-form identity and proxy bias can remain.
+- The interface accepts pasted text. PDF/OCR, ATS integration, authentication and cloud deployment are future work. The Dockerfile is available for packaging, but container execution has not been verified.
 
-```text
-notebooks/01_data_access_preprocessing.ipynb
-notebooks/02_eda.ipynb
-notebooks/03_baseline_model.ipynb
-notebooks/04_advanced_model.ipynb
-reports/problem_scope.md
-reports/data_quality.md
-reports/model_evaluation.md
-reports/ethics_and_fairness.md
-reports/requirements_alignment.md
-reports/figures/
-reports/experiments/
-reports/run_manifest.json
-reports/responsible_use_checks.json
-presentation/output/
-presentation/presenter_guide.md
-```
+Recruiters should inspect the original resume and validate experience. Scores must not determine hiring or rejection on their own. Input resumes stay in process memory and are not deliberately written to disk by the local app.
 
-Training documents/embeddings are excluded from the deployed classifier artifact. The optional research cache `models/document_embeddings.joblib` and raw/processed CSVs exist for notebook and experiment reproduction, not inference.
+## Data and model sources
 
-## Limitations and responsible use
-
-The upstream dataset card is empty, so annotation provenance and synthetic-data status remain uncertain. Contradictory training pairs are quarantined. Test JDs are unseen, but most test resumes recur in training. Unseen-candidate performance remains unproven.
-
-Explicit demographic/contact-field redaction and controlled invariance checks reduce direct exposure. They do not prove demographic fairness. Free-form identity, proxy bias, negation, unsupported skill claims and domain gaps remain. Semantic skill suggestions require recruiter confirmation.
-
-The local app accepts pasted text. Production PDF/OCR, ATS integration, user authentication, calibrated hiring decisions, public hosting and proven recruiter time savings are outside the validated scope. The local app does not deliberately save new input resumes to disk, but in-process caches retain normalized text until restart.
-
-## Optional container packaging
-
-```powershell
-docker build -t herovired-matcher .
-docker run --rm -p 8501:8501 herovired-matcher
-```
-
-Docker packaging is supplied as an optional deployment path. A Docker/cloud run is not claimed unless recorded separately; the tested prototype is local Streamlit and FastAPI.
+- Dataset: [facehuggerapoorv/resume-jd-match](https://huggingface.co/datasets/facehuggerapoorv/resume-jd-match), revision `bfab7acecac062628b39e0dd0c59e72d675edc9c`.
+- Encoder: [sentence-transformers/all-MiniLM-L6-v2](https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2). Its model card and attribution remain in `models/encoder/README.md`.
+- Reproducibility records: `reports/run_manifest.json`, `reports/dataset_source_verification.json` and `reports/submission_manifest.json`.

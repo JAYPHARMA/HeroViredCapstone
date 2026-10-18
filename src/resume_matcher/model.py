@@ -25,7 +25,9 @@ class ResumeJDMatcher:
     """Interpretable resume/JD matcher using TF-IDF similarity plus skill features."""
 
     def __init__(self) -> None:
-        self.vectorizer = TfidfVectorizer(ngram_range=(1, 2), min_df=1, max_features=5000)
+        self.vectorizer = TfidfVectorizer(
+            ngram_range=(1, 2), min_df=1, max_features=5000
+        )
         self.classifier = RandomForestClassifier(
             n_estimators=250,
             random_state=42,
@@ -37,7 +39,9 @@ class ResumeJDMatcher:
 
     def fit(self, frame: pd.DataFrame) -> "ResumeJDMatcher":
         data = self._validate_frame(frame)
-        all_text = pd.concat([data["resume_text"], data["jd_text"]], ignore_index=True).map(clean_text)
+        all_text = pd.concat(
+            [data["resume_text"], data["jd_text"]], ignore_index=True
+        ).map(clean_text)
         self.vectorizer.fit(all_text)
         features = self._feature_matrix(data["resume_text"], data["jd_text"])
         labels = self.label_encoder.fit_transform(data["label"])
@@ -45,7 +49,9 @@ class ResumeJDMatcher:
         self.is_fitted = True
         return self
 
-    def predict_one(self, resume_text: str, jd_text: str, candidate_name: str = "Candidate") -> dict:
+    def predict_one(
+        self, resume_text: str, jd_text: str, candidate_name: str = "Candidate"
+    ) -> dict:
         self._require_fit()
         features = self._feature_matrix([resume_text], [jd_text])
         probabilities = self.classifier.predict_proba(features)[0]
@@ -53,7 +59,9 @@ class ResumeJDMatcher:
             label: float(probabilities[index])
             for index, label in enumerate(self.label_encoder.classes_)
         }
-        prediction = self.label_encoder.inverse_transform([int(np.argmax(probabilities))])[0]
+        prediction = self.label_encoder.inverse_transform(
+            [int(np.argmax(probabilities))]
+        )[0]
         gap = analyze_skill_gap(resume_text, jd_text)
         semantic_similarity = float(features[0, 0])
         score = self._score(label_probabilities, semantic_similarity, gap.overlap_ratio)
@@ -63,7 +71,9 @@ class ResumeJDMatcher:
             "match_score": round(score, 2),
             "semantic_similarity": round(semantic_similarity, 4),
             "skill_overlap_ratio": gap.overlap_ratio,
-            "probabilities": {key: round(value, 4) for key, value in label_probabilities.items()},
+            "probabilities": {
+                key: round(value, 4) for key, value in label_probabilities.items()
+            },
             "skill_gap": asdict(gap),
             "recommendation": self._recommendation(prediction, gap.missing_skills),
         }
@@ -73,7 +83,9 @@ class ResumeJDMatcher:
             self.predict_one(
                 resume_text=str(candidate.get("resume_text", "")),
                 jd_text=jd_text,
-                candidate_name=str(candidate.get("candidate_name", f"Candidate {index + 1}")),
+                candidate_name=str(
+                    candidate.get("candidate_name", f"Candidate {index + 1}")
+                ),
             )
             for index, candidate in enumerate(candidates)
         ]
@@ -96,7 +108,9 @@ class ResumeJDMatcher:
     def _feature_matrix(self, resumes: Iterable[str], jds: Iterable[str]) -> np.ndarray:
         resume_list = list(resumes)
         jd_list = list(jds)
-        resume_vectors = self.vectorizer.transform([clean_text(text) for text in resume_list])
+        resume_vectors = self.vectorizer.transform(
+            [clean_text(text) for text in resume_list]
+        )
         jd_vectors = self.vectorizer.transform([clean_text(text) for text in jd_list])
         rows: list[list[float]] = []
         for index, (resume_text, jd_text) in enumerate(zip(resume_list, jd_list)):
@@ -133,19 +147,34 @@ class ResumeJDMatcher:
         return data[data["label"].isin(LABEL_ORDER)]
 
     @staticmethod
-    def _score(probabilities: dict[str, float], semantic_similarity: float, skill_overlap: float) -> float:
-        expected = (round(probabilities.get("potential_fit",0),4)+2*round(probabilities.get("strong_fit",0),4))/2
-        cosine = max(0.0,min(1.0,round(semantic_similarity,4)))
-        return 100*(.30*expected+.45*cosine+.25*skill_overlap)
+    def _score(
+        probabilities: dict[str, float],
+        semantic_similarity: float,
+        skill_overlap: float,
+    ) -> float:
+        expected = (
+            round(probabilities.get("potential_fit", 0), 4)
+            + 2 * round(probabilities.get("strong_fit", 0), 4)
+        ) / 2
+        cosine = max(0.0, min(1.0, round(semantic_similarity, 4)))
+        return 100 * (0.30 * expected + 0.45 * cosine + 0.25 * skill_overlap)
 
     @staticmethod
     def _recommendation(prediction: str, missing_skills: list[str]) -> str:
         if prediction == "strong_fit":
             return "Shortlist for recruiter review; validate experience depth and project evidence."
         if prediction == "potential_fit":
-            skills = ", ".join(missing_skills[:4]) if missing_skills else "role-specific depth"
+            skills = (
+                ", ".join(missing_skills[:4])
+                if missing_skills
+                else "role-specific depth"
+            )
             return f"Consider after screening; probe gaps around {skills}."
-        skills = ", ".join(missing_skills[:4]) if missing_skills else "core role requirements"
+        skills = (
+            ", ".join(missing_skills[:4])
+            if missing_skills
+            else "core role requirements"
+        )
         return f"Do not reject automatically; manual review needed, but visible gaps include {skills}."
 
     def _require_fit(self) -> None:

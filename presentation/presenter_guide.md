@@ -16,7 +16,7 @@
 
 **Slide 2 · Dataset, 70 seconds**
 
-“The source is the public Hugging Face resume–JD dataset with 8,000 pairs. I validate the format and labels, quarantine contradictory training pairs, and use validation JDs that do not occur in development training. The original test set remains separate. Most test resumes recur in training, so I claim evaluation on unseen JDs, not entirely unseen candidates.”
+“The source is the public Hugging Face resume–JD dataset with 8,000 pairs. I validate the format and labels, quarantine contradictory training pairs, and use validation JDs that do not occur in development training. The original test set remains separate. Most test resumes recur in training. These results measure transfer to unseen JDs; a separate split is needed for new candidates.”
 
 Use the actual split counts in the slide and run manifest. Explain the corrected dataset identifier if asked.
 
@@ -36,7 +36,7 @@ Use the actual split counts in the slide and run manifest. Explain the corrected
 
 Read the measured values on the slide. Explain the majority baseline, class recall, ranking metrics and one false-negative example from the report.
 
-“NDCG@3 rewards putting higher-fit candidates near the top. Precision@3 measures how many of the top three have strong-fit labels. Both average within JD groups. These labels and metrics are imperfect, so I do not claim hiring validity or statistical significance.”
+“NDCG@3 rewards putting higher-fit candidates near the top. Precision@3 measures how many of the top three have strong-fit labels. Both average within JD groups. These are point estimates from this dataset. Hiring validity and statistical significance need additional study.”
 
 **Slide 7 · Live demo, 90 seconds**
 
@@ -44,7 +44,7 @@ Show the existing three inputs. Click Rank candidates. Explain one matched skill
 
 “The keyword-only resume explicitly lacks experience, but the extractor still detects the mentioned tools. This shows the difference between a skill mention and verified proficiency.”
 
-Use the actual outputs, even if an obvious example gets an imperfect category. Do not change labels manually to make the demonstration look better.
+The unrelated design example receives an incorrect potential-fit category but a low ranking score. Use it to explain the classifier error and the separate ranking calculation.
 
 **Slide 8 · Responsible use and future work, 60 seconds**
 
@@ -102,7 +102,7 @@ No recruiter timing study was performed. The prototype enables automated compari
 
 **Are Docker and cloud deployment verified?**
 
-The local Streamlit and API are the validated deployment prototype. A Dockerfile is supplied as packaging guidance. Only claim a container/cloud run if it has actually been built and exercised.
+The local Streamlit and API are the validated deployment prototype. The Dockerfile provides a packaging option. Container and cloud runs are still pending.
 
 ## If the demo fails during the presentation
 

@@ -2,7 +2,7 @@
   "samples": 20,
   "median_ms": 962.0071500103222,
   "p95_ms": 1739.954625000246,
-  "scope": "Standalone process, loaded encoder, empty document cache per pair, includes embedding generation and skill suggestions, excludes startup and HTTP/network; no concurrent capstone checks.",
+  "scope": "Standalone process, loaded encoder, empty document cache per pair, includes embedding generation and skill suggestions, excludes startup and HTTP/network; one inference request at a time.",
   "sample_indices": [
     0,
     92,

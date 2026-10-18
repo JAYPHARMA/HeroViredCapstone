@@ -12,11 +12,26 @@ from resume_matcher.model import ResumeJDMatcher
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Train the resume-JD matching model.")
-    parser.add_argument("--data", default="data/sample_resume_jd.csv", help="CSV path for local training data.")
-    parser.add_argument("--source", choices=["local", "hf"], default="local", help="Use local CSV or Hugging Face dataset.")
-    parser.add_argument("--output", default="models/sample_baseline.joblib", help="Separate baseline output; never overwrites the deployed capstone model.")
+    parser.add_argument(
+        "--data",
+        default="data/sample_resume_jd.csv",
+        help="CSV path for local training data.",
+    )
+    parser.add_argument(
+        "--source",
+        choices=["local", "hf"],
+        default="local",
+        help="Use local CSV or Hugging Face dataset.",
+    )
+    parser.add_argument(
+        "--output",
+        default="models/sample_baseline.joblib",
+        help="Separate baseline output; never overwrites the deployed capstone model.",
+    )
     parser.add_argument("--hf-split", default="train", help="Hugging Face split name.")
-    parser.add_argument("--hf-test-split", default="test", help="Hugging Face evaluation split name.")
+    parser.add_argument(
+        "--hf-test-split", default="test", help="Hugging Face evaluation split name."
+    )
     return parser.parse_args()
 
 

@@ -11,7 +11,9 @@ def main() -> None:
     model = ResumeJDMatcher.load("models/resume_matcher.joblib")
     frame = pd.read_csv("data/sample_resume_jd.csv")
     jd_text = frame.iloc[0]["jd_text"]
-    candidates = frame[["candidate_name", "resume_text"]].head(3).to_dict(orient="records")
+    candidates = (
+        frame[["candidate_name", "resume_text"]].head(3).to_dict(orient="records")
+    )
     ranked = model.rank_candidates(jd_text, candidates)
     print(json.dumps(ranked, indent=2))
 
