@@ -1,0 +1,23 @@
+# Direct dependencies measured in the presentation environment (Python 3.11).
+# Compatibility constraints, not a full transitive/hash lock. See reports/environment.json.
+numpy==1.26.2
+pandas==2.3.3
+scipy==1.16.1
+scikit-learn==1.7.1
+joblib==1.5.2
+torch==2.1.1
+transformers==4.40.2
+tokenizers==0.19.1
+sentence-transformers==2.7.0
+huggingface-hub==0.34.4
+datasets==5.0.1
+streamlit==1.64.0
+fastapi==0.141.1
+uvicorn==0.34.0
+pydantic==2.13.0
+matplotlib==3.9.4
+nbformat==5.10.4
+nbclient==0.10.2
+ipykernel==6.29.5
+pytest==8.3.5
+httpx==0.28.1

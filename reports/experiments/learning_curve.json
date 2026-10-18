@@ -1,0 +1,20 @@
+[
+  {
+    "fraction": 0.25,
+    "rows": 1255,
+    "train_macro_f1": 1.0,
+    "validation_macro_f1": 0.4846809104873621
+  },
+  {
+    "fraction": 0.5,
+    "rows": 2511,
+    "train_macro_f1": 1.0,
+    "validation_macro_f1": 0.44867613421776936
+  },
+  {
+    "fraction": 1.0,
+    "rows": 5025,
+    "train_macro_f1": 0.9582339566458505,
+    "validation_macro_f1": 0.4707421884791152
+  }
+]

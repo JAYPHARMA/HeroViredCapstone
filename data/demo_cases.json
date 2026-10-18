@@ -1,0 +1,12 @@
+{
+  "jd_text": "We need a Python machine learning engineer with NLP, SQL, scikit-learn, FastAPI, Docker and model evaluation experience. The role builds text classification services and validates precision, recall and F1 on holdout data.",
+  "candidates": [
+    {"candidate_name": "Relevant ML experience", "resume_text": "Machine learning engineer with three years of Python, SQL, NLP and scikit-learn experience. Built and deployed text classification services using FastAPI and Docker. Evaluated models with precision, recall and F1 on held-out datasets."},
+    {"candidate_name": "Partial analytics experience", "resume_text": "Data analyst using Python, SQL, pandas and Excel to produce dashboards and reports. Collaborates with business stakeholders on reporting. No evidence of deploying NLP models is provided."},
+    {"candidate_name": "Unrelated design experience", "resume_text": "Graphic designer with four years of Photoshop, illustration, brand identity and print-layout experience. Creates marketing campaigns and social media artwork."}
+  ],
+  "failure_case": {
+    "resume_text": "Tools I have heard of: Python SQL NLP scikit-learn FastAPI Docker machine learning model evaluation precision recall F1. I have no professional experience with these tools and have never built or deployed a model.",
+    "explanation": "A resume can mention every required keyword without providing evidence of skill. Keyword extraction detects mentions and does not understand negation or experience depth reliably. The predicted category may vary, but the skill explanation still over-credits this list. Ask for project evidence and interview validation."
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "revision": "bfab7acecac062628b39e0dd0c59e72d675edc9c",
+  "splits": {
+    "train": {
+      "rows": 6241,
+      "exact_text_and_label_match": true
+    },
+    "test": {
+      "rows": 1759,
+      "exact_text_and_label_match": true
+    }
+  }
+}

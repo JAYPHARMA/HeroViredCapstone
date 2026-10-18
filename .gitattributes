@@ -1,0 +1,10 @@
+# Preserve the exact bytes recorded in the reproducibility/submission manifests.
+* -text
+
+# Keep large model, dataset and submission artifacts in Git LFS.
+models/*.joblib filter=lfs diff=lfs merge=lfs -text
+models/encoder/*.safetensors filter=lfs diff=lfs merge=lfs -text
+data/raw/*.csv filter=lfs diff=lfs merge=lfs -text
+data/processed/*.csv filter=lfs diff=lfs merge=lfs -text
+submission/*.zip filter=lfs diff=lfs merge=lfs -text
+

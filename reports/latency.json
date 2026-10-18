@@ -1,0 +1,31 @@
+{
+  "samples": 20,
+  "median_ms": 962.0071500103222,
+  "p95_ms": 1739.954625000246,
+  "scope": "Standalone process, loaded encoder, empty document cache per pair, includes embedding generation and skill suggestions, excludes startup and HTTP/network; no concurrent capstone checks.",
+  "sample_indices": [
+    0,
+    92,
+    185,
+    277,
+    370,
+    462,
+    555,
+    647,
+    740,
+    832,
+    925,
+    1017,
+    1110,
+    1202,
+    1295,
+    1387,
+    1480,
+    1572,
+    1665,
+    1758
+  ],
+  "cpu": "AMD64 Family 25 Model 80 Stepping 0, AuthenticAMD",
+  "python": "3.11.9",
+  "torch_threads": 6
+}

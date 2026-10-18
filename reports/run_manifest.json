@@ -1,0 +1,26 @@
+{
+  "dataset": "facehuggerapoorv/resume-jd-match",
+  "dataset_revision": "bfab7acecac062628b39e0dd0c59e72d675edc9c",
+  "seed": 42,
+  "raw_sha256": {
+    "original_test.csv": "d8a913de7da6ffb6b4ec41d2ceff07d022c534cbc7da7e479edddf0d8440947d",
+    "original_train.csv": "356250adae91e8acdb585aad16260d7107628389a540e97e176a6b851c26fb58"
+  },
+  "model_sha256": "b84fc13c840ef1164597861e367c1584e066a531eb61f3d10f5afceff34197df",
+  "model": {
+    "selected_model": "Sentence-BERT + logistic C1",
+    "selection_metric": "validation_macro_f1",
+    "validation_macro_f1": 0.4732401429153145,
+    "encoder_frozen": true,
+    "dataset_revision": "bfab7acecac062628b39e0dd0c59e72d675edc9c",
+    "trained_at_utc": "2026-10-18T06:52:24.424581+00:00"
+  },
+  "splits": {
+    "train": 5025,
+    "validation": 1203,
+    "train_full": 6228,
+    "test": 1759
+  },
+  "test_evaluation_policy": "Configuration chosen on validation macro F1, then refit on clean source train. Test results do not select a model.",
+  "deployment_score_policy": "Composite ranking: 30% expected fit, 45% clipped cosine similarity, 25% keyword overlap. Classifier label is preserved separately and may disagree with ranking. Probabilities/cosine rounded to 4 decimals and score to 2, matching deployment."
+}

@@ -1,0 +1,125 @@
+{
+  "original_train": {
+    "rows": 6241,
+    "nulls": {
+      "candidate_name": 0,
+      "job_title": 0,
+      "resume_text": 0,
+      "jd_text": 0,
+      "label": 0
+    },
+    "empty_text": {
+      "resume_text": 0,
+      "jd_text": 0
+    },
+    "labels": {
+      "low_fit": 3143,
+      "potential_fit": 1556,
+      "strong_fit": 1542
+    },
+    "duplicate_pairs": 7,
+    "conflicting_pairs": 6,
+    "unique_jds": 280,
+    "unique_resumes": 642
+  },
+  "clean_train_full": {
+    "rows": 6228,
+    "nulls": {
+      "candidate_name": 0,
+      "job_title": 0,
+      "resume_text": 0,
+      "jd_text": 0,
+      "label": 0
+    },
+    "empty_text": {
+      "resume_text": 0,
+      "jd_text": 0
+    },
+    "labels": {
+      "low_fit": 3136,
+      "potential_fit": 1554,
+      "strong_fit": 1538
+    },
+    "duplicate_pairs": 0,
+    "conflicting_pairs": 0,
+    "unique_jds": 280,
+    "unique_resumes": 642
+  },
+  "train": {
+    "rows": 5025,
+    "nulls": {
+      "candidate_name": 0,
+      "job_title": 0,
+      "resume_text": 0,
+      "jd_text": 0,
+      "label": 0
+    },
+    "empty_text": {
+      "resume_text": 0,
+      "jd_text": 0
+    },
+    "labels": {
+      "low_fit": 2563,
+      "potential_fit": 1249,
+      "strong_fit": 1213
+    },
+    "duplicate_pairs": 0,
+    "conflicting_pairs": 0,
+    "unique_jds": 224,
+    "unique_resumes": 634
+  },
+  "validation": {
+    "rows": 1203,
+    "nulls": {
+      "candidate_name": 0,
+      "job_title": 0,
+      "resume_text": 0,
+      "jd_text": 0,
+      "label": 0
+    },
+    "empty_text": {
+      "resume_text": 0,
+      "jd_text": 0
+    },
+    "labels": {
+      "low_fit": 573,
+      "strong_fit": 325,
+      "potential_fit": 305
+    },
+    "duplicate_pairs": 0,
+    "conflicting_pairs": 0,
+    "unique_jds": 56,
+    "unique_resumes": 460
+  },
+  "test": {
+    "rows": 1759,
+    "nulls": {
+      "candidate_name": 0,
+      "job_title": 0,
+      "resume_text": 0,
+      "jd_text": 0,
+      "label": 0
+    },
+    "empty_text": {
+      "resume_text": 0,
+      "jd_text": 0
+    },
+    "labels": {
+      "low_fit": 857,
+      "strong_fit": 458,
+      "potential_fit": 444
+    },
+    "duplicate_pairs": 0,
+    "conflicting_pairs": 0,
+    "unique_jds": 71,
+    "unique_resumes": 477
+  },
+  "splits": {
+    "test_pairs_also_in_training": 0,
+    "test_jds_also_in_training": 0,
+    "test_resumes_also_in_training": 1758,
+    "train_validation_jd_overlap": 0,
+    "quarantined_rows": 12,
+    "policy": "Quarantine conflicting normalized pairs in source train only, then deduplicate. Original test remains untouched."
+  }
+}

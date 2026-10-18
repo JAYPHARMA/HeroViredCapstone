@@ -1,0 +1,77 @@
+{
+  "demographic_field_checks": [
+    {
+      "example": "Relevant ML experience",
+      "variants": 4,
+      "invariant": true
+    },
+    {
+      "example": "Partial analytics experience",
+      "variants": 4,
+      "invariant": true
+    },
+    {
+      "example": "Unrelated design experience",
+      "variants": 4,
+      "invariant": true
+    }
+  ],
+  "keyword_explanation_checks": [
+    {
+      "resume": "Python SQL",
+      "jd": "Python SQL Docker",
+      "expected_matched": [
+        "python",
+        "sql"
+      ],
+      "actual_matched": [
+        "python",
+        "sql"
+      ],
+      "expected_missing": [
+        "docker"
+      ],
+      "actual_missing": [
+        "docker"
+      ],
+      "passed": true
+    },
+    {
+      "resume": "Java Spring Boot",
+      "jd": "Java SQL",
+      "expected_matched": [
+        "java"
+      ],
+      "actual_matched": [
+        "java"
+      ],
+      "expected_missing": [
+        "sql"
+      ],
+      "actual_missing": [
+        "sql"
+      ],
+      "passed": true
+    },
+    {
+      "resume": "Excel Power BI",
+      "jd": "Excel Power BI Tableau",
+      "expected_matched": [
+        "excel",
+        "power bi"
+      ],
+      "actual_matched": [
+        "excel",
+        "power bi"
+      ],
+      "expected_missing": [
+        "tableau"
+      ],
+      "actual_missing": [
+        "tableau"
+      ],
+      "passed": true
+    }
+  ],
+  "limits": "Small controlled regression checks only. Not a demographic fairness certification or a human annotation study. Free-form proxies and negation remain."
+}

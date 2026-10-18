@@ -1,0 +1,215 @@
+{
+  "ranked_candidates": [
+    {
+      "candidate_name": "Relevant ML experience",
+      "predicted_fit": "potential_fit",
+      "match_score": 79.92,
+      "semantic_similarity": 0.8871,
+      "skill_overlap_ratio": 1.0,
+      "probabilities": {
+        "low_fit": 0.0,
+        "potential_fit": 1.0,
+        "strong_fit": 0.0
+      },
+      "skill_gap": {
+        "jd_skills": [
+          "docker",
+          "machine learning",
+          "model evaluation",
+          "nlp",
+          "python",
+          "rest api",
+          "scikit-learn",
+          "sql"
+        ],
+        "resume_skills": [
+          "docker",
+          "machine learning",
+          "model evaluation",
+          "nlp",
+          "python",
+          "rest api",
+          "scikit-learn",
+          "sql"
+        ],
+        "matched_skills": [
+          "docker",
+          "machine learning",
+          "model evaluation",
+          "nlp",
+          "python",
+          "rest api",
+          "scikit-learn",
+          "sql"
+        ],
+        "missing_skills": [],
+        "extra_skills": [],
+        "overlap_ratio": 1.0
+      },
+      "recommendation": "Consider after screening; probe gaps around role-specific depth.",
+      "score_definition": "Composite priority: 30% expected fit, 45% embedding cosine, 25% keyword overlap. Classifier label is separate and may disagree. Not a hiring probability.",
+      "model_name": "Sentence-BERT + logistic C1",
+      "semantic_skill_suggestions": [],
+      "input_warnings": [
+        "Short inputs differ from many source examples; the category and probabilities can be overconfident. Verify the full resume."
+      ]
+    },
+    {
+      "candidate_name": "Partial analytics experience",
+      "predicted_fit": "low_fit",
+      "match_score": 32.9,
+      "semantic_similarity": 0.5201,
+      "skill_overlap_ratio": 0.375,
+      "probabilities": {
+        "low_fit": 0.9919,
+        "potential_fit": 0.0081,
+        "strong_fit": 0.0
+      },
+      "skill_gap": {
+        "jd_skills": [
+          "docker",
+          "machine learning",
+          "model evaluation",
+          "nlp",
+          "python",
+          "rest api",
+          "scikit-learn",
+          "sql"
+        ],
+        "resume_skills": [
+          "analytics",
+          "excel",
+          "nlp",
+          "pandas",
+          "python",
+          "sql"
+        ],
+        "matched_skills": [
+          "nlp",
+          "python",
+          "sql"
+        ],
+        "missing_skills": [
+          "docker",
+          "machine learning",
+          "model evaluation",
+          "rest api",
+          "scikit-learn"
+        ],
+        "extra_skills": [
+          "analytics",
+          "excel",
+          "pandas"
+        ],
+        "overlap_ratio": 0.375
+      },
+      "recommendation": "Do not reject automatically; manual review needed, but visible gaps include docker, machine learning, model evaluation, rest api.",
+      "score_definition": "Composite priority: 30% expected fit, 45% embedding cosine, 25% keyword overlap. Classifier label is separate and may disagree. Not a hiring probability.",
+      "model_name": "Sentence-BERT + logistic C1",
+      "semantic_skill_suggestions": [],
+      "input_warnings": [
+        "Short inputs differ from many source examples; the category and probabilities can be overconfident. Verify the full resume."
+      ]
+    },
+    {
+      "candidate_name": "Unrelated design experience",
+      "predicted_fit": "potential_fit",
+      "match_score": 20.76,
+      "semantic_similarity": 0.128,
+      "skill_overlap_ratio": 0.0,
+      "probabilities": {
+        "low_fit": 0.0,
+        "potential_fit": 1.0,
+        "strong_fit": 0.0
+      },
+      "skill_gap": {
+        "jd_skills": [
+          "docker",
+          "machine learning",
+          "model evaluation",
+          "nlp",
+          "python",
+          "rest api",
+          "scikit-learn",
+          "sql"
+        ],
+        "resume_skills": [],
+        "matched_skills": [],
+        "missing_skills": [
+          "docker",
+          "machine learning",
+          "model evaluation",
+          "nlp",
+          "python",
+          "rest api",
+          "scikit-learn",
+          "sql"
+        ],
+        "extra_skills": [],
+        "overlap_ratio": 0.0
+      },
+      "recommendation": "Consider after screening; probe gaps around docker, machine learning, model evaluation, nlp.",
+      "score_definition": "Composite priority: 30% expected fit, 45% embedding cosine, 25% keyword overlap. Classifier label is separate and may disagree. Not a hiring probability.",
+      "model_name": "Sentence-BERT + logistic C1",
+      "semantic_skill_suggestions": [],
+      "input_warnings": [
+        "Short inputs differ from many source examples; the category and probabilities can be overconfident. Verify the full resume.",
+        "Predicted fit conflicts with low document similarity. Manual review is required."
+      ]
+    }
+  ],
+  "failure_case": {
+    "candidate_name": "Keyword-only example",
+    "predicted_fit": "potential_fit",
+    "match_score": 75.51,
+    "semantic_similarity": 0.7891,
+    "skill_overlap_ratio": 1.0,
+    "probabilities": {
+      "low_fit": 0.0,
+      "potential_fit": 1.0,
+      "strong_fit": 0.0
+    },
+    "skill_gap": {
+      "jd_skills": [
+        "docker",
+        "machine learning",
+        "model evaluation",
+        "nlp",
+        "python",
+        "rest api",
+        "scikit-learn",
+        "sql"
+      ],
+      "resume_skills": [
+        "docker",
+        "machine learning",
+        "model evaluation",
+        "nlp",
+        "python",
+        "rest api",
+        "scikit-learn",
+        "sql"
+      ],
+      "matched_skills": [
+        "docker",
+        "machine learning",
+        "model evaluation",
+        "nlp",
+        "python",
+        "rest api",
+        "scikit-learn",
+        "sql"
+      ],
+      "missing_skills": [],
+      "extra_skills": [],
+      "overlap_ratio": 1.0
+    },
+    "recommendation": "Consider after screening; probe gaps around role-specific depth.",
+    "score_definition": "Composite priority: 30% expected fit, 45% embedding cosine, 25% keyword overlap. Classifier label is separate and may disagree. Not a hiring probability.",
+    "model_name": "Sentence-BERT + logistic C1",
+    "semantic_skill_suggestions": [],
+    "input_warnings": [
+      "Short inputs differ from many source examples; the category and probabilities can be overconfident. Verify the full resume."
+    ]
+  }
+}

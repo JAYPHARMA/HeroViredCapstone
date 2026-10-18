@@ -1,0 +1,13 @@
+.venv
+.build
+.git
+submission
+__pycache__
+**/__pycache__
+models/archive
+models/document_embeddings.joblib
+data/raw
+data/processed
+tests
+notebooks
+presentation
