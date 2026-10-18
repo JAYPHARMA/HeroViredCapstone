@@ -11,3 +11,4 @@ venv/
 models/archive/
 *.egg-info/
 models/*.pkl
+presentation/diagrams/*.delivery.json

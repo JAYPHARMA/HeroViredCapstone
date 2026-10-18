@@ -175,8 +175,33 @@ def test_streamlit_dashboard_and_invalid_form():
 
     at = AppTest.from_file(str(ROOT / "app_streamlit.py")).run(timeout=90)
     assert not at.exception
-    assert len(at.tabs) == 3 and len(at.dataframe[0].value) == 3
+    assert at.radio(key="section").value == "Match candidates"
+    assert len(at.dataframe[0].value) == 3
     at.text_area[0].set_value(" ")
     next(b for b in at.button if b.label == "Rank candidates").click().run(timeout=90)
     assert not at.exception and len(at.error) > 0
     assert len(at.dataframe[0].value) == 0
+    at.radio(key="section").set_value("How it works").run()
+    at.radio(key="section").set_value("Match candidates").run()
+    assert not at.exception and at.text_area[0].value == " "
+    assert len(at.dataframe[0].value) == 0
+
+
+def test_diagram_menu_and_both_embedded_workflows():
+    from streamlit.testing.v1 import AppTest
+
+    at = AppTest.from_file(str(ROOT / "app_streamlit.py"))
+    at.query_params["page"] = "how-it-works"
+    at.run(timeout=30)
+    assert not at.exception
+    assert at.radio(key="section").value == "How it works"
+    assert not at.text_area and "ranked" not in at.session_state
+    assert "Frozen MiniLM" in at.get("iframe")[0].proto.srcdoc
+    at.radio(key="architecture_view").set_value("Training and evaluation").run()
+    assert not at.exception
+    assert "Group by JD" in at.get("iframe")[0].proto.srcdoc
+    at.radio(key="section").set_value("Model evidence").run()
+    assert not at.exception and len(at.dataframe[0].value) == 3
+    at.radio(key="section").set_value("Known failure case").run()
+    assert not at.exception
+    assert any(button.label == "Run known failure example" for button in at.button)

@@ -1,0 +1,309 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "HeroVired | Model training and evaluation",
+    "output": "presentation/diagrams/training-evaluation.html",
+    "locale": "en",
+    "quality_profile": "showcase",
+    "repository": {
+      "url": "https://github.com/JAYPHARMA/HeroViredCapstone.git",
+      "revision": "e62567a0d3f6e5dc4bbb4f332438be6047a1cc0e"
+    }
+  },
+  "components": [
+    {
+      "id": "archived-pairs",
+      "type": "database",
+      "label": "Dataset snapshot",
+      "sublabel": "Hugging Face; archived CSVs",
+      "pos": [
+        40,
+        40
+      ],
+      "size": [
+        190,
+        76
+      ],
+      "sources": [
+        {
+          "path": "src/resume_matcher/data.py",
+          "line": 10,
+          "end_line": 34
+        },
+        {
+          "path": "scripts/run_capstone.py",
+          "line": 60,
+          "end_line": 70
+        }
+      ]
+    },
+    {
+      "id": "quality-audit",
+      "type": "backend",
+      "label": "Audit + clean",
+      "sublabel": "Conflicts quarantined; deduplicate",
+      "pos": [
+        340,
+        40
+      ],
+      "size": [
+        190,
+        76
+      ],
+      "sources": [
+        {
+          "path": "src/resume_matcher/research.py",
+          "line": 39,
+          "end_line": 74
+        },
+        {
+          "path": "scripts/run_capstone.py",
+          "line": 69,
+          "end_line": 80
+        }
+      ]
+    },
+    {
+      "id": "jd-split",
+      "type": "backend",
+      "label": "Group by JD",
+      "sublabel": "5,025 train / 1,203 validation",
+      "pos": [
+        640,
+        40
+      ],
+      "size": [
+        190,
+        76
+      ],
+      "sources": [
+        {
+          "path": "src/resume_matcher/research.py",
+          "line": 77,
+          "end_line": 89
+        },
+        {
+          "path": "reports/run_manifest.json",
+          "line": 18,
+          "end_line": 23
+        }
+      ]
+    },
+    {
+      "id": "model-comparison",
+      "type": "backend",
+      "label": "Compare models",
+      "sublabel": "TF-IDF RF; frozen SBERT models",
+      "pos": [
+        940,
+        40
+      ],
+      "size": [
+        190,
+        76
+      ],
+      "sources": [
+        {
+          "path": "scripts/run_capstone.py",
+          "line": 114,
+          "end_line": 131
+        },
+        {
+          "path": "scripts/run_capstone.py",
+          "line": 157,
+          "end_line": 192
+        },
+        {
+          "path": "scripts/run_capstone.py",
+          "line": 194,
+          "end_line": 249
+        }
+      ]
+    },
+    {
+      "id": "validation-choice",
+      "type": "backend",
+      "label": "Select on validation",
+      "sublabel": "Macro F1; logistic C = 1",
+      "pos": [
+        940,
+        240
+      ],
+      "size": [
+        190,
+        76
+      ],
+      "sources": [
+        {
+          "path": "scripts/run_capstone.py",
+          "line": 250,
+          "end_line": 258
+        },
+        {
+          "path": "reports/run_manifest.json",
+          "line": 10,
+          "end_line": 17
+        }
+      ]
+    },
+    {
+      "id": "full-refit",
+      "type": "backend",
+      "label": "Refit classifier",
+      "sublabel": "6,228 cleaned training pairs",
+      "pos": [
+        640,
+        240
+      ],
+      "size": [
+        190,
+        76
+      ],
+      "sources": [
+        {
+          "path": "scripts/run_capstone.py",
+          "line": 292,
+          "end_line": 305
+        },
+        {
+          "path": "src/resume_matcher/advanced.py",
+          "line": 66,
+          "end_line": 76
+        }
+      ]
+    },
+    {
+      "id": "heldout-assessment",
+      "type": "backend",
+      "label": "Evaluate + save",
+      "sublabel": "1,759 original test pairs",
+      "pos": [
+        340,
+        240
+      ],
+      "size": [
+        190,
+        76
+      ],
+      "sources": [
+        {
+          "path": "scripts/run_capstone.py",
+          "line": 292,
+          "end_line": 338
+        }
+      ]
+    },
+    {
+      "id": "research-outputs",
+      "type": "database",
+      "label": "Saved outputs",
+      "sublabel": "Classifier, predictions, metrics",
+      "pos": [
+        40,
+        240
+      ],
+      "size": [
+        190,
+        76
+      ],
+      "sources": [
+        {
+          "path": "scripts/run_capstone.py",
+          "line": 292,
+          "end_line": 306
+        },
+        {
+          "path": "scripts/run_capstone.py",
+          "line": 327,
+          "end_line": 338
+        },
+        {
+          "path": "scripts/run_capstone.py",
+          "line": 376,
+          "end_line": 377
+        }
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "id": "archived-pairs-to-quality-audit",
+      "from": "archived-pairs",
+      "to": "quality-audit",
+      "label": "train CSV",
+      "variant": "emphasis"
+    },
+    {
+      "id": "quality-audit-to-jd-split",
+      "from": "quality-audit",
+      "to": "jd-split",
+      "label": "6,228 clean",
+      "variant": "emphasis"
+    },
+    {
+      "id": "jd-split-to-model-comparison",
+      "from": "jd-split",
+      "to": "model-comparison",
+      "label": "train + val",
+      "variant": "emphasis"
+    },
+    {
+      "id": "model-comparison-to-validation-choice",
+      "from": "model-comparison",
+      "to": "validation-choice",
+      "label": "compare F1",
+      "variant": "emphasis"
+    },
+    {
+      "id": "validation-choice-to-full-refit",
+      "from": "validation-choice",
+      "to": "full-refit",
+      "label": "chosen config",
+      "variant": "emphasis"
+    },
+    {
+      "id": "refit-to-assessment",
+      "from": "full-refit",
+      "to": "heldout-assessment",
+      "label": "fitted model",
+      "variant": "emphasis"
+    },
+    {
+      "id": "assessment-to-outputs",
+      "from": "heldout-assessment",
+      "to": "research-outputs",
+      "label": "write files",
+      "variant": "emphasis"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "Reproducible research, separate from inference",
+      "items": [
+        "Pinned dataset revision and seed 42; original training has 6,241 rows.",
+        "Twelve conflicting rows are quarantined and one further duplicate removed.",
+        "Saved artifacts feed both inference interfaces; opening the app does not retrain."
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "What improved on the held-out test",
+      "items": [
+        "TF-IDF + Random Forest: accuracy 46.73%; macro F1 0.3626; NDCG@3 0.6150.",
+        "Sentence-BERT + logistic: accuracy 47.92%; macro F1 0.4489; NDCG@3 0.6910.",
+        "Configuration selection uses validation macro F1, never test labels. Encoder stays frozen."
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "What the evaluation does not establish",
+      "items": [
+        "Original test CSV stays separate; test labels are used only for evaluation.",
+        "Test JDs and exact pairs are unseen, but resumes in 1,758 of 1,759 test pairs recur in training.",
+        "Accuracy is below the 48.72% majority baseline; unseen-candidate validity and fairness remain unproven."
+      ]
+    }
+  ]
+}

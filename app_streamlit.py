@@ -4,6 +4,7 @@ import re
 from pathlib import Path
 import pandas as pd
 import streamlit as st
+import streamlit.components.v1 as components
 from resume_matcher.model import ResumeJDMatcher
 
 ROOT = Path(__file__).resolve().parent
@@ -23,61 +24,65 @@ def split_resumes(raw_text):
     ]
 
 
-st.title("Resume screening and JD matching")
-st.caption("HeroVired AI/ML Capstone · Sanket Toche")
-st.info(
-    "Recruiter decision support. Review the original resume and evidence before making a decision."
-)
-demo = json.loads((ROOT / "data/demo_cases.json").read_text(encoding="utf-8"))
-try:
-    model = load_model()
-except Exception as exc:
-    st.error(
-        f"Could not load the model: {exc}. Check that the saved model and encoder files were downloaded with Git LFS."
-    )
-    st.stop()
-
-tab_match, tab_evidence, tab_failure = st.tabs(
-    ["Match candidates", "Model evidence", "Known failure case"]
-)
-with st.sidebar:
-    st.header("Job and resumes")
-    with st.form("matching_inputs"):
-        jd = st.text_area(
-            "Job description", demo["jd_text"], height=200, max_chars=50000
+def ready_model():
+    try:
+        return load_model()
+    except Exception as exc:
+        st.error(
+            f"Could not load the model: {exc}. Check that the saved model and encoder files were downloaded with Git LFS."
         )
-        raw = st.text_area(
-            "Candidate resumes",
-            "\n---\n".join(c["resume_text"] for c in demo["candidates"]),
-            height=330,
-            help="Separate resumes with --- on a line by itself.",
-        )
-        submitted = st.form_submit_button("Rank candidates", type="primary")
-    st.caption(
-        "Plain text inputs. Candidate names are display labels and do not enter the model."
-    )
+        st.stop()
 
-if submitted or "ranked" not in st.session_state:
-    candidates = split_resumes(raw)
-    if (
-        len(jd.strip()) < 20
-        or not candidates
-        or any(
-            len(c["resume_text"]) < 20 or len(c["resume_text"]) > 50000
-            for c in candidates
-        )
-        or len(candidates) > 50
-    ):
-        st.session_state.ranked = []
-        st.error("Enter a JD and 1–50 resumes, each containing 20–50,000 characters.")
-    else:
-        with st.spinner("Comparing experience and skills…"):
-            try:
-                st.session_state.ranked = model.rank_candidates(jd, candidates)
-            except ValueError as exc:
-                st.error(str(exc))
 
-with tab_match:
+def show_matching(demo):
+    model = ready_model()
+    with st.sidebar:
+        st.header("Job and resumes")
+        with st.form("matching_inputs"):
+            jd = st.text_area(
+                "Job description",
+                st.session_state.get("draft_jd", demo["jd_text"]),
+                height=200,
+                max_chars=50000,
+            )
+            raw = st.text_area(
+                "Candidate resumes",
+                st.session_state.get(
+                    "draft_resumes",
+                    "\n---\n".join(c["resume_text"] for c in demo["candidates"]),
+                ),
+                height=330,
+                help="Separate resumes with --- on a line by itself.",
+            )
+            submitted = st.form_submit_button("Rank candidates", type="primary")
+        st.caption(
+            "Plain text inputs. Candidate names are display labels and do not enter the model."
+        )
+
+    st.session_state.draft_jd = jd
+    st.session_state.draft_resumes = raw
+    if submitted or "ranked" not in st.session_state:
+        candidates = split_resumes(raw)
+        if (
+            len(jd.strip()) < 20
+            or not candidates
+            or any(
+                len(c["resume_text"]) < 20 or len(c["resume_text"]) > 50000
+                for c in candidates
+            )
+            or len(candidates) > 50
+        ):
+            st.session_state.ranked = []
+            st.error(
+                "Enter a JD and 1–50 resumes, each containing 20–50,000 characters."
+            )
+        else:
+            with st.spinner("Comparing experience and skills…"):
+                try:
+                    st.session_state.ranked = model.rank_candidates(jd, candidates)
+                except ValueError as exc:
+                    st.error(str(exc))
+
     st.subheader("Candidate ranking")
     st.caption(
         "Ranking blends 30% expected fit, 45% embedding similarity and 25% keyword overlap. The classifier category is a separate prediction and can disagree. Scores are not hiring probabilities."
@@ -138,7 +143,8 @@ with tab_match:
         "text/csv",
     )
 
-with tab_evidence:
+
+def show_evidence():
     metrics_path = ROOT / "reports/metrics.json"
     if metrics_path.exists():
         metrics = json.loads(metrics_path.read_text())
@@ -172,11 +178,13 @@ with tab_evidence:
         "Explicit demographic/contact-field redaction reduces direct exposure. Free-form sensitive text and proxy bias may remain."
     )
 
-with tab_failure:
+
+def show_failure(demo):
     st.subheader("Keyword lists can overstate experience")
     st.write(demo["failure_case"]["explanation"])
     st.code(demo["failure_case"]["resume_text"])
     if st.button("Run known failure example"):
+        model = ready_model()
         with st.spinner("Running failure example…"):
             st.json(
                 model.predict_one(
@@ -188,3 +196,73 @@ with tab_failure:
     st.warning(
         "Negation, experience depth, and unsupported skill claims still require human review. No automated rejection."
     )
+
+
+def show_architecture():
+    st.subheader("How it works")
+    st.write(
+        "Explore how resumes become ranked results, then see how the model was trained and evaluated."
+    )
+    view = st.radio(
+        "Diagram",
+        ["Prediction workflow", "Training and evaluation"],
+        horizontal=True,
+        key="architecture_view",
+    )
+    filename = (
+        "prediction-workflow.html"
+        if view == "Prediction workflow"
+        else "training-evaluation.html"
+    )
+    diagram = ROOT / "presentation" / "diagrams" / filename
+    if not diagram.exists():
+        st.error(
+            "The diagram file is missing. Check that presentation/diagrams was included in deployment."
+        )
+        return
+    html = diagram.read_text(encoding="utf-8")
+    st.caption(
+        "Click a box to inspect its details and source code. Use Live to animate the flow, or Export to save an image."
+    )
+    st.download_button(
+        "Download interactive diagram",
+        data=html,
+        file_name=filename,
+        mime="text/html",
+    )
+    # Only embed the checked-in presentation asset, never uploaded/user HTML.
+    components.html(html, height=1050, scrolling=True, tab_index=0)
+
+
+st.title("Resume screening and JD matching")
+st.caption("HeroVired AI/ML Capstone · Sanket Toche")
+st.info(
+    "Recruiter decision support. Review the original resume and evidence before making a decision."
+)
+SECTIONS = {
+    "Match candidates": "match-candidates",
+    "How it works": "how-it-works",
+    "Model evidence": "model-evidence",
+    "Known failure case": "known-failure-case",
+}
+requested = st.query_params.get("page", "match-candidates")
+initial = next(
+    (name for name, slug in SECTIONS.items() if slug == requested), "Match candidates"
+)
+section = st.sidebar.radio(
+    "Menu", list(SECTIONS), index=list(SECTIONS).index(initial), key="section"
+)
+if st.query_params.get("page") != SECTIONS[section]:
+    st.query_params["page"] = SECTIONS[section]
+st.sidebar.caption("Sanket Toche · HeroVired AI/ML Capstone")
+
+if section == "How it works":
+    show_architecture()
+elif section == "Model evidence":
+    show_evidence()
+else:
+    demo = json.loads((ROOT / "data/demo_cases.json").read_text(encoding="utf-8"))
+    if section == "Known failure case":
+        show_failure(demo)
+    else:
+        show_matching(demo)

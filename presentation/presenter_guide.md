@@ -40,7 +40,7 @@ Read the measured values on the slide. Explain the majority baseline, class reca
 
 **Slide 7 · Live demo, 90 seconds**
 
-Show the existing three inputs. Click Rank candidates. Explain one matched skill and one missing skill. Expand prediction details and possible skill paraphrases if any appear. Download the CSV. Open Model evidence to show the comparison. Open Known failure case and run it.
+Use the sidebar menu to open How it works. Show Prediction workflow, click a component to inspect its source, then switch to Training and evaluation. Return to Match candidates and show the existing three inputs. Click Rank candidates. Explain one matched skill and one missing skill. Expand prediction details and possible skill paraphrases if any appear. Download the CSV. Open Model evidence to show the comparison. Open Known failure case and run it.
 
 “The keyword-only resume explicitly lacks experience, but the extractor still detects the mentioned tools. This shows the difference between a skill mention and verified proficiency.”
 
@@ -102,7 +102,7 @@ No recruiter timing study was performed. The prototype enables automated compari
 
 **Are Docker and cloud deployment verified?**
 
-The local Streamlit and API are the validated deployment prototype. The Dockerfile provides a packaging option. Container and cloud runs are still pending.
+The Streamlit dashboard is hosted on Community Cloud, and the local Streamlit and API prototype have been validated. The Dockerfile provides a packaging option; container execution has not been verified.
 
 ## If the demo fails during the presentation
 

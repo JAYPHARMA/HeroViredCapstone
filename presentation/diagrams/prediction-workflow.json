@@ -1,0 +1,314 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "HeroVired | Resume matching at inference",
+    "output": "presentation/diagrams/prediction-workflow.html",
+    "locale": "en",
+    "quality_profile": "showcase",
+    "repository": {
+      "url": "https://github.com/JAYPHARMA/HeroViredCapstone.git",
+      "revision": "e62567a0d3f6e5dc4bbb4f332438be6047a1cc0e"
+    }
+  },
+  "components": [
+    {
+      "id": "submitted-text",
+      "type": "external",
+      "label": "Job + resumes",
+      "sublabel": "One JD; 1-50 candidates",
+      "pos": [
+        40,
+        40
+      ],
+      "size": [
+        190,
+        76
+      ],
+      "sources": [
+        {
+          "path": "app_streamlit.py",
+          "line": 43,
+          "end_line": 76
+        },
+        {
+          "path": "api_fastapi.py",
+          "line": 35,
+          "end_line": 47
+        }
+      ]
+    },
+    {
+      "id": "input-interfaces",
+      "type": "frontend",
+      "label": "Input interfaces",
+      "sublabel": "Streamlit OR FastAPI",
+      "pos": [
+        340,
+        40
+      ],
+      "size": [
+        190,
+        76
+      ],
+      "sources": [
+        {
+          "path": "app_streamlit.py",
+          "line": 13,
+          "end_line": 23
+        },
+        {
+          "path": "app_streamlit.py",
+          "line": 60,
+          "end_line": 78
+        },
+        {
+          "path": "api_fastapi.py",
+          "line": 63,
+          "end_line": 76
+        }
+      ]
+    },
+    {
+      "id": "normalized-text",
+      "type": "backend",
+      "label": "Text preparation",
+      "sublabel": "Clean + explicit-field redaction",
+      "pos": [
+        640,
+        40
+      ],
+      "size": [
+        190,
+        76
+      ],
+      "sources": [
+        {
+          "path": "src/resume_matcher/preprocessing.py",
+          "line": 13,
+          "end_line": 52
+        },
+        {
+          "path": "src/resume_matcher/advanced.py",
+          "line": 35,
+          "end_line": 43
+        }
+      ]
+    },
+    {
+      "id": "document-vectors",
+      "type": "backend",
+      "label": "Frozen MiniLM",
+      "sublabel": "Chunk pool; 384-D per document",
+      "pos": [
+        940,
+        40
+      ],
+      "size": [
+        190,
+        76
+      ],
+      "sources": [
+        {
+          "path": "src/resume_matcher/advanced.py",
+          "line": 19,
+          "end_line": 63
+        }
+      ]
+    },
+    {
+      "id": "paired-features",
+      "type": "backend",
+      "label": "Pair features",
+      "sublabel": "Embeddings + lexical + skills",
+      "pos": [
+        940,
+        240
+      ],
+      "size": [
+        190,
+        76
+      ],
+      "sources": [
+        {
+          "path": "src/resume_matcher/advanced.py",
+          "line": 89,
+          "end_line": 97
+        },
+        {
+          "path": "src/resume_matcher/model.py",
+          "line": 108,
+          "end_line": 137
+        }
+      ]
+    },
+    {
+      "id": "fit-classifier",
+      "type": "backend",
+      "label": "Fit classifier",
+      "sublabel": "Scaler + logistic regression",
+      "pos": [
+        640,
+        240
+      ],
+      "size": [
+        190,
+        76
+      ],
+      "sources": [
+        {
+          "path": "scripts/run_capstone.py",
+          "line": 184,
+          "end_line": 192
+        },
+        {
+          "path": "scripts/run_capstone.py",
+          "line": 250,
+          "end_line": 254
+        },
+        {
+          "path": "src/resume_matcher/model.py",
+          "line": 52,
+          "end_line": 75
+        }
+      ]
+    },
+    {
+      "id": "review-priority",
+      "type": "backend",
+      "label": "Priority score",
+      "sublabel": "30% fit / 45% cosine / 25% skills",
+      "pos": [
+        340,
+        240
+      ],
+      "size": [
+        190,
+        76
+      ],
+      "sources": [
+        {
+          "path": "src/resume_matcher/advanced.py",
+          "line": 99,
+          "end_line": 136
+        },
+        {
+          "path": "src/resume_matcher/model.py",
+          "line": 81,
+          "end_line": 92
+        }
+      ]
+    },
+    {
+      "id": "review-results",
+      "type": "frontend",
+      "label": "Recruiter review",
+      "sublabel": "Rank, gaps, warnings; CSV / JSON",
+      "pos": [
+        40,
+        240
+      ],
+      "size": [
+        190,
+        76
+      ],
+      "sources": [
+        {
+          "path": "app_streamlit.py",
+          "line": 80,
+          "end_line": 139
+        },
+        {
+          "path": "api_fastapi.py",
+          "line": 63,
+          "end_line": 76
+        },
+        {
+          "path": "src/resume_matcher/advanced.py",
+          "line": 138,
+          "end_line": 167
+        }
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "id": "submitted-text-to-input-interfaces",
+      "from": "submitted-text",
+      "to": "input-interfaces",
+      "label": "submit",
+      "variant": "emphasis"
+    },
+    {
+      "id": "input-interfaces-to-normalized-text",
+      "from": "input-interfaces",
+      "to": "normalized-text",
+      "label": "validate",
+      "variant": "emphasis"
+    },
+    {
+      "id": "normalized-text-to-document-vectors",
+      "from": "normalized-text",
+      "to": "document-vectors",
+      "label": "encode",
+      "variant": "emphasis"
+    },
+    {
+      "id": "document-vectors-to-paired-features",
+      "from": "document-vectors",
+      "to": "paired-features",
+      "label": "compare",
+      "variant": "emphasis"
+    },
+    {
+      "id": "paired-features-to-fit-classifier",
+      "from": "paired-features",
+      "to": "fit-classifier",
+      "label": "1,545 values",
+      "variant": "emphasis"
+    },
+    {
+      "id": "fit-classifier-to-review-priority",
+      "from": "fit-classifier",
+      "to": "review-priority",
+      "label": "fit + evidence",
+      "variant": "emphasis"
+    },
+    {
+      "id": "review-priority-to-review-results",
+      "from": "review-priority",
+      "to": "review-results",
+      "label": "sort + explain",
+      "variant": "emphasis"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "Two entry points, one Python matcher",
+      "items": [
+        "Streamlit calls the matcher directly; it does not call the FastAPI server.",
+        "FastAPI POST /match returns JSON. Streamlit displays results and exports CSV.",
+        "Logical inference stages are shown, not separate network services."
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "Saved weights; no training during a request",
+      "items": [
+        "Startup loads models/resume_matcher.joblib; MiniLM loads from models/encoder on CPU.",
+        "Up to eight evenly spaced 150-word chunks are pooled; encoder token limit is 256.",
+        "Pair input: r, j, |r-j|, r*j, embedding cosine and eight lexical/skill features."
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "Explain the limits in the viva",
+      "items": [
+        "Fit category is separate from ranking; neither score is a calibrated hiring probability.",
+        "Keyword gaps and semantic paraphrase suggestions are evidence to verify, not proof of proficiency.",
+        "Short inputs and keyword stuffing can fail. Human review is required."
+      ]
+    }
+  ]
+}

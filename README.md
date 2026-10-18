@@ -39,7 +39,11 @@ The dependency file pins the direct package versions used for evaluation. The co
 
 Open http://localhost:8501. On Windows, `launch_dashboard.cmd` runs the same command.
 
-Paste one job description and separate resumes with `---` on a line by itself. The dashboard displays rankings, fit categories, matched/missing keywords and possible skill paraphrases. Results can be downloaded as CSV. The other tabs contain evaluation figures and a keyword-stuffing failure example.
+Hosted dashboard: [HeroVired Capstone](https://heroviredcapstone-galkgzfeasfbamryw8n92j.streamlit.app/).
+
+Paste one job description and separate resumes with `---` on a line by itself. The dashboard displays rankings, fit categories, matched/missing keywords and possible skill paraphrases. Results can be downloaded as CSV. The sidebar menu also provides **How it works**, **Model evidence**, and **Known failure case**.
+
+**How it works** contains interactive prediction and training diagrams for the presentation. Click components for source references, animate the flow, or download the standalone HTML. Open this section directly by adding `?page=how-it-works` to the app URL. The diagrams are bundled in `presentation/diagrams/` and need no separate hosting service.
 
 The included model and local encoder support offline inference. Retraining is optional.
 
@@ -100,7 +104,7 @@ Ranking combines 30% expected fit, 45% embedding cosine and 25% keyword overlap.
 | `models/` | Saved classifiers, local encoder and research embedding cache |
 | `presentation/` | Eight-slide PowerPoint, speaker notes and presentation guide |
 | `submission/` | Portable project ZIP |
-| `tests/` | 15 regression checks covering preprocessing, inference, API and dashboard |
+| `tests/` | 16 regression checks covering preprocessing, inference, API and dashboard navigation |
 
 ## Limitations
 
@@ -108,7 +112,7 @@ Ranking combines 30% expected fit, 45% embedding cosine and 25% keyword overlap.
 - Source annotation quality and synthetic-data status are uncertain. Contradictory training pairs are quarantined.
 - Overfitting, short inputs, negation and unsupported skill lists can produce incorrect or overconfident categories.
 - Explicit demographic/contact-field redaction passes controlled checks. Free-form identity and proxy bias can remain.
-- The interface accepts pasted text. PDF/OCR, ATS integration, authentication and cloud deployment are future work. The Dockerfile is available for packaging, but container execution has not been verified.
+- The interface accepts pasted text. PDF/OCR, ATS integration and authentication are future work. The dashboard is hosted on Streamlit Community Cloud. The Dockerfile is available for packaging, but container execution has not been verified.
 
 Recruiters should inspect the original resume and validate experience. Scores must not determine hiring or rejection on their own. Input resumes stay in process memory and are not deliberately written to disk by the local app.
 
