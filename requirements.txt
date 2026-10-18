@@ -1,1 +1,21 @@
--r requirements-lock.txt
+# Runtime dependencies for Streamlit Community Cloud (Python 3.11).
+--extra-index-url https://download.pytorch.org/whl/cpu
+torch==2.1.1+cpu; sys_platform == "linux"
+torch==2.1.1; sys_platform != "linux"
+numpy==1.26.2
+pandas==2.3.3
+scipy==1.16.1
+scikit-learn==1.7.1
+joblib==1.5.2
+streamlit==1.64.0
+transformers==4.40.2
+tokenizers==0.19.1
+sentence-transformers==2.7.0
+huggingface-hub==0.34.4
+fastapi==0.141.1
+uvicorn==0.34.0
+pydantic==2.13.0
+protobuf>=3.20,<6
+
+# Editable installation keeps the src-layout package and model paths together.
+-e .

@@ -33,7 +33,7 @@ try:
     model = load_model()
 except Exception as exc:
     st.error(
-        f"Could not load the model: {exc}. Start with launch_dashboard.cmd in the project folder."
+        f"Could not load the model: {exc}. Check that the saved model and encoder files were downloaded with Git LFS."
     )
     st.stop()
 

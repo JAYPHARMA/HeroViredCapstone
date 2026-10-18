@@ -43,6 +43,21 @@ Paste one job description and separate resumes with `---` on a line by itself. T
 
 The included model and local encoder support offline inference. Retraining is optional.
 
+## Streamlit Community Cloud
+
+On the deployment form, use:
+
+| Field | Value |
+|---|---|
+| Repository | `JAYPHARMA/HeroViredCapstone` |
+| Branch | `main` |
+| Main file path | `app_streamlit.py` |
+| Python version in Advanced settings | `3.11` |
+
+Alternatively, paste `https://github.com/JAYPHARMA/HeroViredCapstone/blob/main/app_streamlit.py` into the GitHub URL field. Choose an available app subdomain and click Deploy. No API keys or secrets are required for this app.
+
+`requirements.txt` installs the application package and runtime dependencies, including CPU-only PyTorch on Linux. `requirements-lock.txt` also includes the tools needed to reproduce the research locally. Community Cloud supports the repository's Git LFS model files.
+
 ## API
 
 ```powershell
